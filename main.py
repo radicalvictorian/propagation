@@ -1,31 +1,30 @@
 import vector
+import surface
+import gas
+
 import math
-import field
-import display_helper
-import matplotlib.pyplot as plt
-
-cube_size=50
-
-density=field.Density_field(cube_size,cube_size,cube_size,0.001)
-density.generic_quad_cubes(101325*5,101325)
-x_vals,y_vals,z_vals,vals=density.sparse_lattice(1,10)
-
-fig = plt.figure()
-#ax = fig.add_subplot(projection='3d')
-ax = fig.add_subplot()
-
-# For each set of style and range settings, plot n random points in the box
-# defined by x in [23, 32], y in [0, 100], z in [zlow, zhigh].
-
-#ax.scatter(x_vals,y_vals,z_vals,marker='o')
-
-for i in range(len(x_vals)):
-    ax.plot(x_vals[i],y_vals[i],color=display_helper.get_rgb_density(vals[i]),marker="o")
+import pygame
+import time
 
 
 
-ax.set_xlabel('X Label')
-ax.set_ylabel('Y Label')
-#ax.set_zlabel('Z Label')
 
-plt.show()
+#number,max_velocity,bound,timestep,interaction_radius
+gas = gas.Ideal_Gas(7,8,900,0.02,0.5)
+
+x,y,z=gas.get_coords()
+
+pygame.init()
+screen = pygame.display.set_mode((900,900))
+screen.fill((255,255,255))
+
+while True:
+    gas.update_positions()
+    x,y,z=gas.get_coords()
+
+    screen.fill((255,255,255))
+
+    for i in range(len(x)):
+        pygame.draw.circle(screen,(0,0,0),(x[i],y[i]),5)
+    
+    pygame.display.update()
